@@ -10,12 +10,15 @@ export function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() {
-          return cookieStore.getAll();
+        // getAll debe ser async porque cookies() es Promise en algunos contextos
+        async getAll() {
+          return (await cookieStore).getAll();
         },
-        setAll(cookiesToSet) {
+        // setAll también async
+        async setAll(cookiesToSet) {
+          const store = await cookieStore;
           cookiesToSet.forEach(({ name, value, options }) => {
-            cookieStore.set(name, value, options);
+            store.set(name, value, options);
           });
         },
       },
