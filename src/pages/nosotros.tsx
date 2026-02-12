@@ -33,7 +33,7 @@ export default function Nosotros() {
                 side === 'left' ? 'rounded-bl-none ml-auto' : 'rounded-br-none'
               }`}
             >
-              {text}   // ← ahora text es el string correcto
+              {text}  
             </div>
           ))}
         </div>
