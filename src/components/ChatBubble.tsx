@@ -1,6 +1,6 @@
 interface ChatBubbleProps {
   text: string;
-  sender: 'user' | 'mod';
+  sender: string;  // permite cualquier string por ahora
 }
 
 export default function ChatBubble({ text, sender }: ChatBubbleProps) {
