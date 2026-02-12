@@ -2,10 +2,11 @@ import Image from 'next/image';
 import ChatBubble from '@/components/ChatBubble';
 
 const exampleMessages = [
-  { content: "Hola, no sé por dónde empezar. Mi pareja me pega y me insulta. Siento miedo de salir de casa o que esto vaya a peor.", sender: 'user' },
-  { content: "Hola, Carlos. Gracias por compartirlo. Lo que estás viviendo es violencia y no es tu culpa. Tu seguridad ahora es lo más importante.", sender: 'mod' },
-  // Agrega el resto del PDF
-];
+  { content: "Hola, no sé por dónde empezar. Mi pareja me pega y me insulta...", sender: "user" as const },
+  { content: "Hola, Carlos. Gracias por compartirlo...", sender: "mod" as const },
+  { content: "Queremos ayudarte a que tengas herramientas concretas...", sender: "mod" as const },
+  // agrega el resto igual, siempre con "as const"
+] as const;
 
 export default function Contacto() {
  return (
