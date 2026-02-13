@@ -37,47 +37,47 @@ export default function Home() {
 
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-stone-950/30 to-stone-950/65" />
 
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 sm:px-6 md:px-10 lg:px-16 xl:px-20 2xl:px-24">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl 2xl:text-7xl font-extrabold tracking-tight mb-8 sm:mb-10 md:mb-12 lg:mb-14 xl:mb-16 2xl:mb-20 text-white drop-shadow-2xl px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 sm:px-6 md:px-10 lg:px-16 xl:px-20">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-6xl font-extrabold tracking-tight mb-8 sm:mb-10 md:mb-12 lg:mb-14 xl:mb-16 text-white drop-shadow-2xl px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
             TU ESPACIO DE CONFIANZA
           </h1>
 
           {session ? (
             <div className="space-y-6 sm:space-y-8 md:space-y-10">
-              <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-3xl text-stone-100">
+              <p className="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl text-stone-100">
                 Bienvenido, {session.user.email?.split('@')[0]}!
               </p>
               <button
                 onClick={logout}
-                className="bg-red-700 hover:bg-red-600 text-white px-8 sm:px-12 md:px-16 lg:px-20 xl:px-24 py-4 sm:py-5 md:py-6 lg:py-8 xl:py-10 rounded-full text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl font-semibold shadow-lg transition-all hover:scale-105 min-w-[180px] sm:min-w-[220px] md:min-w-[260px] lg:min-w-[300px] xl:min-w-[340px]"
+                className="bg-red-700 hover:bg-red-600 text-white px-8 sm:px-10 md:px-12 lg:px-14 xl:px-16 py-4 sm:py-5 md:py-6 lg:py-7 xl:py-8 rounded-full text-lg sm:text-xl md:text-xl lg:text-xl xl:text-xl font-semibold shadow-lg transition-all hover:scale-105 min-w-[180px] sm:min-w-[220px] md:min-w-[260px] lg:min-w-[280px] xl:min-w-[300px]"
               >
                 Cerrar sesión
               </button>
             </div>
           ) : isGuest ? (
             <div className="space-y-6 sm:space-y-8 md:space-y-10">
-              <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-3xl text-stone-100">
+              <p className="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl text-stone-100">
                 Modo invitado activado
               </p>
               <button
                 onClick={logout}
-                className="bg-stone-700 hover:bg-stone-600 text-white px-8 sm:px-12 md:px-16 lg:px-20 xl:px-24 py-4 sm:py-5 md:py-6 lg:py-8 xl:py-10 rounded-full text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl font-semibold shadow-lg transition-all hover:scale-105 min-w-[180px] sm:min-w-[220px] md:min-w-[260px] lg:min-w-[300px] xl:min-w-[340px]"
+                className="bg-stone-700 hover:bg-stone-600 text-white px-8 sm:px-10 md:px-12 lg:px-14 xl:px-16 py-4 sm:py-5 md:py-6 lg:py-7 xl:py-8 rounded-full text-lg sm:text-xl md:text-xl lg:text-xl xl:text-xl font-semibold shadow-lg transition-all hover:scale-105 min-w-[180px] sm:min-w-[220px] md:min-w-[260px] lg:min-w-[280px] xl:min-w-[300px]"
               >
                 Salir de modo invitado
               </button>
             </div>
           ) : (
-            <div className="flex flex-col sm:flex-row gap-5 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16">
+            <div className="flex flex-col sm:flex-row gap-5 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-14">
               <button
                 onClick={() => { setIsSignup(true); setShowAuth(true); }}
-                className="bg-amber-800/90 hover:bg-amber-700/90 backdrop-blur-sm border border-amber-700/40 text-white px-8 sm:px-10 md:px-12 lg:px-16 xl:px-20 py-4 sm:py-5 md:py-6 lg:py-8 xl:py-10 rounded-full text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl font-semibold transition-all shadow-xl min-w-[180px] sm:min-w-[220px] md:min-w-[260px] lg:min-w-[300px] xl:min-w-[340px]"
+                className="bg-amber-800/90 hover:bg-amber-700/90 backdrop-blur-sm border border-amber-700/40 text-white px-8 sm:px-10 md:px-12 lg:px-14 xl:px-16 py-4 sm:py-5 md:py-6 lg:py-7 xl:py-8 rounded-full text-lg sm:text-xl md:text-xl lg:text-xl xl:text-xl font-semibold transition-all shadow-xl min-w-[180px] sm:min-w-[220px] md:min-w-[260px] lg:min-w-[280px] xl:min-w-[300px]"
               >
                 REGÍSTRATE
               </button>
 
               <button
                 onClick={() => { setIsSignup(false); setShowAuth(true); }}
-                className="bg-stone-800/80 hover:bg-stone-700/80 backdrop-blur-sm border border-stone-600/50 text-white px-8 sm:px-10 md:px-12 lg:px-16 xl:px-20 py-4 sm:py-5 md:py-6 lg:py-8 xl:py-10 rounded-full text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl font-semibold transition-all shadow-xl min-w-[180px] sm:min-w-[220px] md:min-w-[260px] lg:min-w-[300px] xl:min-w-[340px]"
+                className="bg-stone-800/80 hover:bg-stone-700/80 backdrop-blur-sm border border-stone-600/50 text-white px-8 sm:px-10 md:px-12 lg:px-14 xl:px-16 py-4 sm:py-5 md:py-6 lg:py-7 xl:py-8 rounded-full text-lg sm:text-xl md:text-xl lg:text-xl xl:text-xl font-semibold transition-all shadow-xl min-w-[180px] sm:min-w-[220px] md:min-w-[260px] lg:min-w-[280px] xl:min-w-[300px]"
               >
                 INICIAR SESIÓN
               </button>
@@ -85,7 +85,7 @@ export default function Home() {
           )}
 
           {!session && !isGuest && (
-            <p className="mt-6 sm:mt-8 md:mt-10 lg:mt-12 xl:mt-14 text-base sm:text-lg md:text-xl lg:text-2xl xl:text-2xl text-stone-300">
+            <p className="mt-6 sm:mt-8 md:mt-10 lg:mt-12 xl:mt-14 text-base sm:text-lg md:text-xl lg:text-xl xl:text-xl text-stone-300">
               *Si quieres continuar sin sesión,{' '}
               <button onClick={handleGuest} className="underline hover:text-white transition">
                 pulsa aquí
