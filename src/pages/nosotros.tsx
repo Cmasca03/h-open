@@ -25,21 +25,20 @@ export default function Nosotros() {
 
   const supabase = createClient();
 
-  // Cargar testimonios según el estado de la sesión
   const loadTestimonios = async () => {
     try {
+      console.log('Cargando testimonios... sesión existe?', !!session, 'email:', session?.user?.email);
+
       let query = supabase
         .from('testimonios')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (session) {
-        // Logueado: ve TODOS los públicos aprobados + TODOS sus privados (aprobados o no)
         query = query.or(
           `approved.eq.true,visibility.eq.public,user_id.eq.${session.user.id}`
         );
       } else {
-        // Invitado: solo públicos aprobados
         query = query.eq('approved', true).eq('visibility', 'public');
       }
 
@@ -47,20 +46,19 @@ export default function Nosotros() {
 
       if (error) throw error;
 
-      console.log('Testimonios cargados:', data); // ← para depurar
+      console.log('Testimonios cargados:', data);
       setTestimonios(data || []);
     } catch (err: any) {
-      console.error('Error al cargar testimonios:', err);
-      setError('No se pudieron cargar los testimonios. Intenta refrescar la página.');
+      console.error('Error al cargar:', err);
+      setError('No se pudieron cargar los testimonios. Intenta refrescar.');
     }
   };
 
-  // Cargar al montar la página y cuando cambie la sesión
   useEffect(() => {
     loadTestimonios();
   }, [session]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+ const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
   if (!session) {
@@ -77,21 +75,34 @@ export default function Nosotros() {
   setError(null);
 
   try {
+    // FORZAR refresco de sesión y obtener token fresco
+    const { data: { session: freshSession }, error: sessionError } = await supabase.auth.getSession();
+
+    if (sessionError || !freshSession?.access_token) {
+      console.error('Error al refrescar sesión:', sessionError);
+      throw new Error('No se pudo refrescar la sesión. Intenta cerrar y abrir sesión de nuevo.');
+    }
+
+    console.log('Token fresco encontrado:', freshSession.access_token.substring(0, 20) + '...');
+
     const response = await fetch('/api/testimonios', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${freshSession.access_token}`,  // Enviamos token fresco
       },
       body: JSON.stringify({
         content: newTestimonio.trim(),
         visibility,
       }),
+      credentials: 'include',  // Envía cookies por si acaso
     });
 
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(result.error || 'Error al enviar');
+      console.error('Respuesta API:', result);
+      throw new Error(result.error || 'Error al enviar el testimonio');
     }
 
     setNewTestimonio('');
@@ -106,13 +117,12 @@ export default function Nosotros() {
     // Recargar la lista
     loadTestimonios();
   } catch (err: any) {
-    console.error('Error al enviar:', err);
+    console.error('Error completo al enviar:', err);
     setError(err.message || 'Error al enviar. Inténtalo de nuevo.');
   } finally {
     setLoading(false);
   }
 };
-
   return (
     <div className="relative min-h-screen">
       <Image
@@ -136,7 +146,6 @@ export default function Nosotros() {
           Tus palabras pueden ayudar a otros hombres que están pasando por lo mismo.
         </p>
 
-        {/* Formulario solo si está logueado */}
         {session && !isGuest ? (
           <div className="mb-12 md:mb-16 bg-stone-900/60 backdrop-blur-md border border-stone-700/50 p-6 md:p-8 rounded-2xl">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 text-amber-300">
@@ -200,7 +209,7 @@ export default function Nosotros() {
             </p>
             {!isGuest && (
               <button
-                onClick={() => { /* Aquí puedes abrir el modal de login si lo tienes */ }}
+                onClick={() => { /* Abre modal de login */ }}
                 className="bg-amber-700 hover:bg-amber-600 text-white px-8 py-4 rounded-full text-lg font-semibold"
               >
                 Iniciar sesión
@@ -209,7 +218,6 @@ export default function Nosotros() {
           </div>
         )}
 
-        {/* Lista de testimonios */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
           {testimonios.length === 0 ? (
             <p className="col-span-full text-center text-xl md:text-2xl text-stone-400 py-12">
