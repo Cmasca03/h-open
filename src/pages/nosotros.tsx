@@ -61,49 +61,57 @@ export default function Nosotros() {
   }, [session]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!session) {
-      alert('Debes iniciar sesión para compartir un testimonio.');
-      return;
-    }
+  if (!session) {
+    alert('Debes iniciar sesión para compartir un testimonio.');
+    return;
+  }
 
-    if (!newTestimonio.trim()) {
-      alert('Escribe algo antes de enviar.');
-      return;
-    }
+  if (!newTestimonio.trim()) {
+    alert('Escribe algo antes de enviar.');
+    return;
+  }
 
-    setLoading(true);
-    setError(null);
+  setLoading(true);
+  setError(null);
 
-    try {
-      const { error } = await supabase.from('testimonios').insert({
+  try {
+    const response = await fetch('/api/testimonios', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         content: newTestimonio.trim(),
         visibility,
-        user_id: session.user.id, // ¡Esto es clave!
-        approved: visibility === 'private' ? true : false,
-      });
+      }),
+    });
 
-      if (error) throw error;
+    const result = await response.json();
 
-      setNewTestimonio('');
-      setVisibility('private');
-
-      alert(
-        visibility === 'public'
-          ? 'Testimonio enviado para revisión. Aparecerá cuando sea aprobado.'
-          : 'Testimonio guardado de forma privada (solo visible para usuarios registrados).'
-      );
-
-      // Recargar la lista inmediatamente
-      loadTestimonios();
-    } catch (err: any) {
-      console.error('Error al enviar testimonio:', err);
-      setError(err.message || 'Error al enviar. Inténtalo de nuevo.');
-    } finally {
-      setLoading(false);
+    if (!response.ok) {
+      throw new Error(result.error || 'Error al enviar');
     }
-  };
+
+    setNewTestimonio('');
+    setVisibility('private');
+
+    alert(
+      visibility === 'public'
+        ? 'Testimonio enviado para revisión. Aparecerá cuando sea aprobado.'
+        : 'Testimonio guardado de forma privada (solo visible para usuarios registrados).'
+    );
+
+    // Recargar la lista
+    loadTestimonios();
+  } catch (err: any) {
+    console.error('Error al enviar:', err);
+    setError(err.message || 'Error al enviar. Inténtalo de nuevo.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="relative min-h-screen">

@@ -7,7 +7,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Método no permitido' });
   }
 
-  // Crear cliente de Supabase en servidor (usa cookies para obtener sesión)
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -28,11 +27,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   );
 
-  // Obtener la sesión del usuario desde las cookies
   const { data: { session } } = await supabase.auth.getSession();
 
   if (!session) {
-    return res.status(401).json({ error: 'Debes iniciar sesión para compartir un testimonio.' });
+    return res.status(401).json({ error: 'Debes iniciar sesión' });
   }
 
   const { content, visibility } = req.body;
@@ -49,9 +47,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   });
 
   if (error) {
-    console.error('Error al insertar testimonio:', error);
+    console.error(error);
     return res.status(400).json({ error: error.message });
   }
 
-  return res.status(200).json({ success: true, data });
+  return res.status(200).json({ success: true });
 }
